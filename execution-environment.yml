@@ -20,3 +20,4 @@ additional_build_steps:
   append:
     #- RUN pip3 list installed
     - RUN microdnf install which
+    - RUN microdnf install iputils

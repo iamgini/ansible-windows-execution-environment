@@ -8,6 +8,46 @@ Ansible Execution environment image for Windows with Kerberos Authentication
 - 
 If the user is a member of the Administrators group on the remote host then you shouldn't have to touch the SDDL of the WinRM listener at all. This is only necessary if the user is a limited user and needs access.
 
+
+## Install PowerShell and PowerCLI inside EE
+
+## Step 1: Download the packages
+- [Download](https://learn.microsoft.com/en-us/powershell/scripting/install/install-rhel?view=powershell-7.3) and store PowerShell RPM.
+- [Download](https://developer.vmware.com/web/tool/13.0.0/vmware-powercli) and store PowerCLI zip file.
+
+Extract PowerCLI and package as `tar.gz` (This is to avoid the container build issue with zip file extraction).
+
+```shell
+# extract the zip file
+unzip VMware-PowerCLI-13.0.0-20829139.zip
+
+# package the extracted directory as tar.gz
+tar -zcvf powercli.tar.gz VMware-PowerCLI-13.0.0-20829139
+```
+
+## Step 2:
+
+Prepare the `execution-environment.yml` with `append` options as follows.
+
+```yaml
+.
+.
+additional_build_steps:
+  prepend:
+    .
+    .    
+  append:
+    .
+    .
+    - COPY powershell-7.3.2-1.rh.x86_64.rpm /tmp/powershell-7.3.2-1.rh.x86_64.rpm    
+    - RUN rpm -i /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+
+    - ADD powercli.tar.gz /opt/microsoft/powershell/7/Modules
+    - WORKDIR /opt/microsoft/powershell/7/Modules
+    - RUN mv VMware-PowerCLI-13.0.0-20829139/* .
+```
+
+
 ## References
 
 - [How to create a new Execution Environment for Red Hat Ansible Automation Platform 2.x?](https://access.redhat.com/solutions/6654601)

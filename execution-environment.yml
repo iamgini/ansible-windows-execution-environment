@@ -15,9 +15,30 @@ dependencies:
 additional_build_steps:
   prepend:
     - COPY krb5.conf /etc/krb5.conf
+    - RUN microdnf install which iputils unzip
     # - COPY ansible.cfg /etc/ansible/ansible.cfg
-#    - RUN pip3 install --upgrade pip setuptools
+    # - RUN pip3 install --upgrade pip setuptools
+    # - COPY powershell-7.3.2-1.rh.x86_64.rpm /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+    # - RUN microdnf localinstall /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+    # - RUN yum install /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+    # - RUN rpm -i /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+    # - ADD VMware-PowerCLI-13.0.0-20829139.zip /opt/microsoft/powershell/7-lts/Modules/
+    # - COPY VMware-PowerCLI-13.0.0-20829139.zip /opt/microsoft/powershell/7-lts/Modules/VMware-PowerCLI-13.0.0-20829139.zip
+    
   append:
     #- RUN pip3 list installed
-    - RUN microdnf install which
-    - RUN microdnf install iputils
+    # - RUN microdnf install which iputils unzip
+    # - RUN microdnf install iputils
+
+    - COPY powershell-7.3.2-1.rh.x86_64.rpm /tmp/powershell-7.3.2-1.rh.x86_64.rpm    
+    - RUN rpm -i /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+
+    - ADD powercli.tar.gz /opt/microsoft/powershell/7/Modules
+    - WORKDIR /opt/microsoft/powershell/7/Modules
+    # - RUN tar -xzvf powercli.tar.gz
+    - RUN mv VMware-PowerCLI-13.0.0-20829139/* .
+
+    # - ADD VMware-PowerCLI-13.0.0-20829139.zip /opt/microsoft/powershell/7/Modules
+    # - COPY VMware-PowerCLI-13.0.0-20829139.zip /opt/microsoft/powershell/7/Modules/VMware-PowerCLI-13.0.0-20829139.zip
+    # - WORKDIR /opt/microsoft/powershell/7/Modules
+    # - RUN unzip VMware-PowerCLI-13.0.0-20829139.zip

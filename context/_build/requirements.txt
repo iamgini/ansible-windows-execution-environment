@@ -1,14 +1,4 @@
-# ansible-pylibssh
-# paramiko
-
-# ## for panos
-# pan-os-python
-# xmltodict
-
-# aws
-# boto3
-
-## already expecting inside the main image
+## expecting inside the base image
 # botocore>=1.19.0
 # boto3>=1.16.0
 # boto>=2.49.0

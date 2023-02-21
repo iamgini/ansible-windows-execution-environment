@@ -26,11 +26,15 @@ RUN assemble
 FROM $EE_BASE_IMAGE
 USER root
 COPY krb5.conf /etc/krb5.conf
+RUN microdnf install which iputils unzip
 
 COPY --from=galaxy /usr/share/ansible /usr/share/ansible
 
 COPY --from=builder /output/ /output/
 RUN /output/install-from-bindep && rm -rf /output/wheels
-RUN microdnf install which
-RUN microdnf install iputils
+COPY powershell-7.3.2-1.rh.x86_64.rpm /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+RUN rpm -i /tmp/powershell-7.3.2-1.rh.x86_64.rpm
+ADD powercli.tar.gz /opt/microsoft/powershell/7/Modules
+WORKDIR /opt/microsoft/powershell/7/Modules
+RUN mv VMware-PowerCLI-13.0.0-20829139/* .
 LABEL ansible-execution-environment=true
